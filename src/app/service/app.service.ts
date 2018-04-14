@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import  'rxjs/add/operator/map';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AppService {
@@ -18,6 +18,7 @@ export class AppService {
     return this.http.get(this.url + 'photo-aed/get-aed');
   }
 
+
   getNotice(selectedOptions: any) {
     let map = {};
     selectedOptions.skills.forEach(x => {
@@ -27,5 +28,5 @@ export class AppService {
       params: map,
     });
   }
-  
+
 }

@@ -1,7 +1,7 @@
 <div id="mySidenav" class="sidenav">
   <a class="closebtn" (click)="closeSlider()">&times;</a>
   <div class="row" *ngIf="openSlider">
-    <!--<div><img src="../../assets/{{chosenPeople.icon}}"/></div>-->
+    <div style="width: 100%; text-align: center; margin-bottom: 30px;"><img style="border: 4px solid #FFF;" src="http://dymek.utp.edu.pl:8066/api/v1/file/read/{{chosenPeople.patient.photoId}}" class="rounded-circle" height="200px"/></div>
 
     <div class="col-12">
       <div>
