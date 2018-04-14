@@ -1,0 +1,203 @@
+<div id="mySidenav" class="sidenav">
+  <a class="closebtn" (click)="closeSlider()">&times;</a>
+  <div class="row" *ngIf="openSlider">
+    <!--<div><img src="../../assets/{{chosenPeople.icon}}"/></div>-->
+
+    <div class="col-12">
+      <div>
+        <strong class="blue">Imię i nazwisko</strong><br/>
+        {{chosenPeople.patient.name}}
+      </div>
+
+      <div>
+        <strong class="blue">Opis pacjenta</strong><br/>
+        {{chosenPeople.patient.patientDescription}}
+      </div>
+
+      <div>
+        <strong class="blue">Telefon</strong><br/>
+        {{chosenPeople.patient.phoneNumber}}
+      </div>
+
+      <div>
+        <strong class="blue">Opis ratownika</strong><br/>
+        {{chosenPeople.patient.rescuerDescriptiom}}
+      </div>
+    </div>
+
+
+    <h3 *ngIf="chosenPeople.informationType === 'DANGER_LIFE' ||
+        chosenPeople.informationType === 'DANGER_HEALTH' ||
+        chosenPeople.informationType === 'HELP' ||
+        chosenPeople.informationType === 'OTHER' " class="title">Ratownicy w drodzę</h3>
+    <div class="row rescue-box" *ngFor="let rescue of  chosenPeople.rescuers">
+      <div class="col-6"><strong class="blue">Imię i nazwisko</strong></div>
+      <div class="col-6">{{rescue.name}}</div>
+
+      <div class="col-6"><strong class="blue">Telefon</strong></div>
+      <div class="col-6">{{rescue.phoneNumber}}</div>
+
+      <div class="col-6"><strong class="blue">Opis ratownika</strong></div>
+      <div class="col-6">{{rescue.rescuerDescriptiom}}</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="main">
+  <div class="logo"><img src="../../assets/logo-hack.png"></div>
+  <div class="options-block" (click)="openModal(filter)"><img src="../../assets/filter-tool-black-shape.png"></div>
+  <div class="list-block" (click)="openModal(listNotice)"><img src="../../assets/exclamation-mark.png"></div>
+
+  <section class=" maps">
+    <agm-map [latitude]="53.121534059282546" [longitude]="17.997387216635712" [zoom]="14" [usePanning]="true">
+      <agm-marker *ngFor="let item of aed" [latitude]="item.lat" [longitude]="item.lon"
+                  iconUrl="../../assets/aed.png"></agm-marker>
+      <agm-marker *ngFor="let person of people" [latitude]="person.lat" [longitude]="person.lng"
+                  (markerClick)="openSliderBox(person)" iconUrl="../../assets/{{person.icon}}"></agm-marker>
+
+      <agm-circle [latitude]="latCircle" [longitude]="lonCircle"
+                  [radius]="radiusCircle"
+                  [fillColor]="'red'"
+                  [circleDraggable]="false"
+                  [editable]="false"
+                  [visible]="visibleCircle"
+
+      >
+      </agm-circle>
+    </agm-map>
+
+  </section>
+
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{chosenPeople.title}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+
+        <div class="col-12">
+          <div class="row">
+            <div class="col-6"><strong>Imię i nazwisko</strong></div>
+            <div class="col-6">{{chosenPeople.patient.name}}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-6"><strong>Opis pacjenta</strong></div>
+            <div class="col-6">{{chosenPeople.patient.patientDescription}}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-6"><strong>Telefon</strong></div>
+            <div class="col-6">{{chosenPeople.patient.phoneNumber}}</div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-6"><strong>Opis ratownika</strong></div>
+            <div class="col-6">{{chosenPeople.patient.rescuerDescriptiom}}</div>
+          </div>
+
+
+        </div>
+
+        <h3 *ngIf="chosenPeople.informationType === 'DANGER_LIFE' ||
+        chosenPeople.informationType === 'DANGER_HEALTH' ||
+        chosenPeople.informationType === 'HELP' ||
+        chosenPeople.informationType === 'OTHER' " class="title">Ratownicy w drodzę</h3>
+        <div class="row rescue-box" *ngFor="let rescue of  chosenPeople.rescuers">
+          <div class="col-6"><strong>Imię i nazwisko</strong></div>
+          <div class="col-6">{{rescue.name}}</div>
+
+          <div class="col-6"><strong>Telefon</strong></div>
+          <div class="col-6">{{rescue.phoneNumber}}</div>
+
+          <div class="col-6"><strong>Opis ratownika</strong></div>
+          <div class="col-6">{{rescue.rescuerDescriptiom}}</div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+
+  <ng-template #filter>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Filtr</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+
+    <div class="modal-body">
+
+      <form [formGroup]="form" (submit)="submit(form.value)" class="option-wrap">
+        <div *ngFor="let skill of skills.controls; let i=index" class="option-item">
+          <input type="checkbox" [formControl]="skill" (change)="submit(form.value)"/>{{user.skills[i].name}}
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+
+  <ng-template #listNotice>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Lista zdarzeń</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <accordion [closeOthers]="true">
+
+        <div *ngFor="let person of people">
+
+
+          <div
+            *ngIf="person.informationType === 'DANGER_LIFE' ||
+        person.informationType === 'DANGER_HEALTH' ||
+        person.informationType === 'HELP' ||
+        person.informationType === 'OTHER' ">
+            <accordion-group heading="{{person.title}}">
+              <div class="row">
+
+
+                <div class="col-6"><strong>Imię i nazwisko</strong></div>
+                <div class="col-6">{{person.patient.name}}</div>
+
+                <div class="col-6"><strong>Opis pacjenta</strong></div>
+                <div class="col-6">{{person.patient.patientDescription}}</div>
+
+                <div class="col-6"><strong>Telefon</strong></div>
+                <div class="col-6">{{person.patient.phoneNumber}}</div>
+
+                <div class="col-6"><strong>Opis ratownika</strong></div>
+                <div class="col-6">{{person.patient.rescuerDescriptiom}}</div>
+
+
+                <h3 class="title">Ratownicy w drodzę</h3>
+                <div class="rescue-box row" *ngFor="let rescue of person.rescuers">
+                  <div class="col-6"><strong>Imię i nazwisko</strong></div>
+                  <div class="col-6">{{rescue.name}}</div>
+
+                  <div class="col-6"><strong>Telefon</strong></div>
+                  <div class="col-6">{{rescue.phoneNumber}}</div>
+
+                  <div class="col-6"><strong>Opis ratownika</strong></div>
+                  <div class="col-6">{{rescue.rescuerDescriptiom}}</div>
+                </div>
+
+              </div>
+            </accordion-group>
+          </div>
+
+        </div>
+
+      </accordion>
+    </div>
+  </ng-template>
+</div>
